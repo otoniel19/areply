@@ -1,0 +1,31 @@
+{
+  "name": "areply",
+  "version": "1.0.0",
+  "description": "areply create read–eval–print-loop (repl) programs",
+  "main": "index.js",
+  "scripts": {
+    "build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/otoniel19/areply.git"
+  },
+  "keywords": [
+    "repl",
+    "read-eval-print-loop",
+    "terminal"
+  ],
+  "author": "otoniel19",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/otoniel19/areply/issues"
+  },
+  "homepage": "https://github.com/otoniel19/areply#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.23"
+  },
+  "dependencies": {
+    "chalk": "4.1.2",
+    "meant": "^2.0.1"
+  }
+}
