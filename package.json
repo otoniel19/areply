@@ -1,14 +1,14 @@
 {
-  "name": "areply",
+  "name": "creply",
   "version": "1.0.0",
-  "description": "areply create read–eval–print-loop (repl) programs",
+  "description": "creply create read–eval–print-loop (repl) programs",
   "main": "index.js",
   "scripts": {
     "build": ""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/otoniel19/areply.git"
+    "url": "git+https://github.com/otoniel19/creply.git"
   },
   "keywords": [
     "repl",
@@ -18,9 +18,9 @@
   "author": "otoniel19",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/otoniel19/areply/issues"
+    "url": "https://github.com/otoniel19/creply/issues"
   },
-  "homepage": "https://github.com/otoniel19/areply#readme",
+  "homepage": "https://github.com/otoniel19/creply#readme",
   "devDependencies": {
     "@types/node": "^17.0.23"
   },
