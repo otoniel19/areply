@@ -1,4 +1,4 @@
-# areply
+# creply
 
 > the read-eval-print-loop creator for node.js
 
@@ -15,8 +15,8 @@
 # create a simple repl
 
 ```js
-const areply = require("areply");
-const repl = new areply(
+const creply = require("areply");
+const repl = new creply(
   "history-file.txt",
   "my-repl-name",
   "my-repl-prefix",
@@ -68,7 +68,7 @@ repl.on("command", (data) => {
   // this returns the command name and arguments parsed in string and array
 });
 //user input
-repl.on("line", (line) => {
+repl.on("input", (line) => {
   //the full repl input
 });
 ```

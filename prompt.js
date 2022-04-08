@@ -14,7 +14,7 @@ const loadHistory = async (file) => {
 
   return new Promise((resolve, reject) => {
     rl.on("close", () => {
-      resolve(history);
+      resolve(history.reverse());
     });
   });
 };
@@ -25,7 +25,9 @@ module.exports = async (hf, pr) => {
     input: process.stdin,
     output: process.stdout,
     terminal: true,
-    history: historyArray
+    history: historyArray,
+    removeHistoryDuplicates: true,
+    historySize: historyArray.length
   });
   return new Promise((resolve, reject) => {
     rlp.question(pr, (answer) => {

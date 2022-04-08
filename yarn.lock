@@ -39,11 +39,6 @@ has-flag@^4.0.0:
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-4.0.0.tgz#944771fd9c81c81265c4d6941860da06bb59479b"
   integrity sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
 
-meant@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/meant/-/meant-2.0.1.tgz#9827ca767093eabfb5bfad070e60a8cc21909a82"
-  integrity sha512-ujdpKVtGk2bJJnQHaJknSjuE7955b55kO8v+1bEScXsy3H/vagnOAiUXTzb/kTRHbDVdY0Kc6PS3jHLYo8RpvA==
-
 supports-color@^7.1.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-7.2.0.tgz#1b7dcdcb32b8138801b3e478ba6a51caa89648da"

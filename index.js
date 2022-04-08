@@ -3,13 +3,12 @@ const { stdin } = require("process");
 const readline = require("readline");
 const c = require("chalk");
 const { log } = console;
-const meant = require("meant");
 
 readline.emitKeypressEvents(stdin);
 
 const events = require("events");
 
-class areply extends events {
+class creply extends events {
   /**
    * @param {string} historyFile the file to save the history
    * @param {string} replName the name of the repl
@@ -49,39 +48,23 @@ class areply extends events {
     }
   }
   /**
-   * the areply eval used by the repl
+   * the creply eval used by the repl
    * @param {string} args the repl arguments
    * @returns {void}
    */
   eval(args) {
-    const data = args.replace(this.prefix, "").split(" ");
-    const command = data[0];
-    data.shift();
-    const commandArgs = data.join(" ");
-    if (command == "help") {
-      this.help();
-      return;
-    } else if (command == "close") {
-      this.close();
-    } else {
-      for (const commandObj of this.commands) {
-        if (commandObj.name === command) {
-          commandObj.fn(commandArgs);
-        } else {
-          log(`${c.red("command not found:")} ${c.gray(command)}`);
-          var list = ["help", "close"];
-          this.commands.forEach(({ name }) => list.push(name));
-          var youMean = meant(command, list);
-          youMean != null
-            ? log(`${c.gray("did you mean:")} ${c.green(youMean)}?`)
-            : "";
-        }
-      }
+    args = args.replace(this.prefix, "");
+    const command = args.split(" ")[0];
+    const commandArgs = args.split(" ").slice(1).join(" ").trim();
+    if (command == "help") this.help();
+    else if (command == "close") this.close();
+    else if (command == "clear")
+      process.stdout.write("\x1B[2J\x1B[3J\x1B[H\x1Bc");
+    else {
+      const cmd = this.commands.find((key) => key.name == command);
+      if (cmd) cmd.fn(commandArgs);
+      else log(`${c.red("command not found:")} ${c.gray(command)}`);
     }
-    this.emit("command", {
-      cmd: command,
-      args: { string: commandArgs, array: data }
-    });
   }
   /**
    * close the repl
@@ -97,7 +80,7 @@ class areply extends events {
    */
   addCommand(name, description, fn) {
     this.commands.push({
-      name: name,
+      name: name.replaceAll(" ", "-"),
       desc: description,
       fn: fn
     });
@@ -112,12 +95,13 @@ class areply extends events {
     log(`${c.gray("prefix:")} ${c.blue(this.prefix)}`);
     log(`${c.gray("commands:")}`);
     this.commands.forEach((key) => {
-      log(` ${c.green(key.name)} ${c.grey("->")} ${c.grey(key.desc)}`);
+      log(` ${c.green(key.name)} ${c.grey(key.desc)}`);
     });
 
     log(`${c.gray("system commands:")}`);
-    log(` ${c.green("close")} ${c.grey("->")} ${c.grey("close the repl")}`);
-    log(` ${c.green("help")} ${c.grey("->")} ${c.grey("show this help")}`);
+    log(` ${c.green("close")} ${c.grey("close the repl")}`);
+    log(` ${c.green("help")} ${c.grey("show this help")}`);
+    log(` ${c.green("clear")} ${c.gray("clear the repl")}`);
   }
   /**
    * chalk
@@ -128,4 +112,4 @@ class areply extends events {
   }
 }
 
-module.exports = areply;
+module.exports = creply;
