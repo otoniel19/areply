@@ -1,15 +1,16 @@
 {
   "name": "creply",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "creply create read–eval–print-loop (repl) programs",
   "main": "index.js",
   "scripts": {
-    "build": "node build.js"
+    "install": "node build.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/otoniel19/creply.git"
   },
+  "types": "./types",
   "keywords": [
     "repl",
     "read-eval-print-loop",
