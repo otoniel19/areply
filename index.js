@@ -5,6 +5,7 @@ const c = require("chalk");
 const { log } = console;
 
 readline.emitKeypressEvents(stdin);
+if (stdin.isTTY) stdin.setRawMode(true);
 
 const events = require("events");
 
@@ -16,6 +17,7 @@ class creply extends events {
    * @param {string} version the version of the repl
    * @param {string} originalName the original name of the repl
    * @param {string} description the description of the repl
+   * @param {boolean} showHelpOnStart if true show help for commands on start
    */
   constructor(
     historyFile,
@@ -23,7 +25,8 @@ class creply extends events {
     commandsPrefix,
     version,
     originalName,
-    description
+    description,
+    showHelpOnStart
   ) {
     super();
     this.historyFile = historyFile;
@@ -34,6 +37,15 @@ class creply extends events {
     this.description = description;
     /** @type {any[]} */
     this.commands = [];
+    showHelpOnStart
+      ? log(
+          c.gray(
+            `welcome to ${c.blue(this.originalName)} ${c.green(
+              this.version
+            )}\ntype ${c.green(this.prefix)}${c.green("help")} to view help`
+          )
+        )
+      : null;
   }
   async start() {
     while (true) {
@@ -63,7 +75,9 @@ class creply extends events {
     else {
       const cmd = this.commands.find((key) => key.name == command);
       if (cmd) cmd.fn(commandArgs);
-      else log(`${c.red("command not found:")} ${c.gray(command)}`);
+      else {
+        log(`${c.red("command not found:")} ${c.gray(command)}`);
+      }
     }
   }
   /**
@@ -80,7 +94,7 @@ class creply extends events {
    */
   addCommand(name, description, fn) {
     this.commands.push({
-      name: name.replaceAll(" ", "-"),
+      name: name.replaceAll(" ", "-").trim(),
       desc: description,
       fn: fn
     });
@@ -94,9 +108,11 @@ class creply extends events {
     log(`${c.gray("version:")} ${c.blue(this.version)}`);
     log(`${c.gray("prefix:")} ${c.blue(this.prefix)}`);
     log(`${c.gray("commands:")}`);
-    this.commands.forEach((key) => {
-      log(` ${c.green(key.name)} ${c.grey(key.desc)}`);
-    });
+    this.commands.length !== 0
+      ? this.commands.forEach((key) => {
+          log(` ${c.green(key.name)} ${c.grey(key.desc)}`);
+        })
+      : log(` ${c.red("no commands")}`);
 
     log(`${c.gray("system commands:")}`);
     log(` ${c.green("close")} ${c.grey("close the repl")}`);
