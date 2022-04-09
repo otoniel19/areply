@@ -27,9 +27,9 @@ module.exports = async (hf, pr) => {
     terminal: true,
     history: historyArray,
     removeHistoryDuplicates: true,
-    historySize: historyArray.length,
-    prompt: pr
+    historySize: historyArray.length
   });
+
   return new Promise((resolve, reject) => {
     rlp.question(pr, (answer) => {
       resolve(answer);

@@ -12,10 +12,10 @@ const events = require("events");
 class creply extends events {
   /**
    * @param {string} historyFile the file to save the history
-   * @param {string} replName the name of the repl
+   * @param {string} replName the name of the question to show on repl
    * @param {string} commandsPrefix the prefix of repl commands
    * @param {string} version the version of the repl
-   * @param {string} originalName the original name of the repl
+   * @param {string} originalName the original name of the repl to
    * @param {string} description the description of the repl
    * @param {boolean} showHelpOnStart if true show help for commands on start
    */
@@ -48,6 +48,10 @@ class creply extends events {
       : null;
   }
   async start() {
+    this.emit("start");
+    this.setMaxListeners(0);
+    stdin.setMaxListeners(0);
+    this.handleThings();
     while (true) {
       stdin.on("keypress", (ch, key) =>
         this.emit("keypress", { ch: ch, key: key })
@@ -84,6 +88,7 @@ class creply extends events {
    * close the repl
    */
   close() {
+    this.emit("close");
     process.exit(1);
   }
   /**
@@ -125,6 +130,26 @@ class creply extends events {
    */
   get c() {
     return c;
+  }
+  handleThings() {
+    //when the process is exited
+    process.on("exit", () => {
+      log(
+        `\n${c.blue(this.originalName)} ${c.gray(
+          "exited with status"
+        )} ${c.blue(process.exitCode !== undefined ? process.exitCode : 0)}`
+      );
+    });
+    //handle errors
+    process.on("uncaughtException", (err) => {
+      log(
+        `${c.red(err.name !== undefined ? err.name.trim() : "error")} ${c.gray(
+          err.message
+        )} ${c.gray(
+          err.stack.replaceAll(err.name, "").replaceAll(err.message, "")
+        )}`.replace(":", "")
+      );
+    });
   }
 }
 

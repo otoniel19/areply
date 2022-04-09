@@ -2,6 +2,8 @@ var c = require("chalk");
 var { log } = console;
 var fs = require("fs");
 
+if (!fs.existsSync("./types")) fs.mkdirSync("./types");
+
 const shell = (cmd) => {
   const spawn = require("child_process").spawnSync;
   const data = cmd.split(" ");

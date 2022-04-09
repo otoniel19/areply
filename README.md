@@ -1,4 +1,7 @@
+<!-- markdownlint-disable MD033 MD013 -->
+
 # creply
+
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![downloads-month](https://img.shields.io/npm/dm/creply.svg?style=flat)
 ![downloads-week](https://img.shields.io/npm/dw/creply.svg?style=flat)
@@ -7,11 +10,11 @@
 
 # features
 
-> you can add commands
-> listen keypresses
-> listen for user commands
-> listen for user inputs
-> save history
+> you can add commands<br>
+> listen events<br>
+> save history<br>
+> handle errors<br>
+> handle process exits
 
 # usage
 
@@ -53,7 +56,11 @@ repl.start();
 # create a command
 
 ```js
-repl.addCommand("command-name", "command-description", (commandArguments) => {});
+repl.addCommand(
+  "command-name",
+  "command-description",
+  (commandArguments) => {}
+);
 ```
 
 > explanation:
@@ -65,6 +72,14 @@ repl.addCommand("command-name", "command-description", (commandArguments) => {})
 # listening events
 
 ```js
+//repl start
+repl.on("start", () => {
+  // do something
+});
+//repl close
+repl.on("close", () => {
+  // do something
+});
 //keypress
 repl.on("keypress", ({ ch, key }) => {
   // the ch is the char
