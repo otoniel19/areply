@@ -1,6 +1,6 @@
 {
   "name": "creply",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "creply create read–eval–print-loop (repl) programs",
   "main": "index.js",
   "scripts": {
