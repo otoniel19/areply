@@ -1,98 +1,117 @@
-<!-- markdownlint-disable MD033 MD013 -->
+<!-- markdownlint-disable MD015 MD033 -->
 
 # creply
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-![downloads-month](https://img.shields.io/npm/dm/creply.svg?style=flat)
-![downloads-week](https://img.shields.io/npm/dw/creply.svg?style=flat)
+[see a more detailed documentation](https://otoniel19.github.io/creply/docs/)
 
-> the read-eval-print-loop creator for node.js
+- create read-eval-print-loop programs
 
-# features
-
-> you can add commands<br>
-> listen events<br>
-> save history<br>
-> handle errors<br>
-> handle process exits
-
-# usage
-
-# create a simple repl
+# creating a repl
 
 ```js
 const creply = require("creply");
-const repl = new creply(
-  "history-file.txt",
-  "my-repl-name",
-  "my-repl-prefix",
-  "my-repl-version",
-  "my-repl-original-name",
-  "my-repl-description",
-  true
-);
+const repls = new creply({
+  name: "test",
+  prefix: "!",
+  description: "test",
+  version: "1.0.0",
+  promptName: "> ",
+  showHelpOnStart: true,
+  historyFilePath: "./repl"
+});
 ```
 
-> explanation:
+- this is the base of creating a repl
 
-- first arg is the history file to save the repl history
-- second arg is the name to show on questions
-- third arg is the prefix of commands
-- fourth arg is the version of repl
-- fifth arg is the original name of the repl
-- sixth arg is the description of repl
-- last arg is for show help on the repl start if true will show a help with prefix name and version output will be like:
-  > welcome to repl v1.0.0<br>
-  > type !help to view help
-
-# start the repl
+# starting the repl
 
 ```js
-repl.start();
+repl.start(); // this starts the repl
 ```
 
-- this will start the repl process
+# adding and removing commands
 
-# create a command
+- to add a command use repl.addCommand
 
 ```js
-repl.addCommand(
-  "command-name",
-  "command-description",
-  (commandArguments) => {}
-);
+//this adds a command
+repl.addCommand("cmd", "run a bash command", (args) => {
+  const data = args.split(" ");
+  const cmd = data[0];
+  const cmdArgs = cmd.slice(1);
+  require("child_process").spawnSync(cmd, cmdArgs, { stdio: "inherit" });
+});
 ```
 
-> explanation:
+- when the command is called the function called "action" will be auto called passing args to the function
 
-- first arg is the name of command
-- second arg is the description of command
-- last arg is the function that will be called when user call the command
-
-# listening events
+- to remove a command use repl.removeCommand
 
 ```js
-//repl start
-repl.on("start", () => {
-  // do something
-});
-//repl close
-repl.on("close", () => {
-  // do something
-});
-//keypress
-repl.on("keypress", ({ ch, key }) => {
-  // the ch is the char
-  // the key is the key pressed info
-});
-//command
-repl.on("command", (data) => {
-  // this returns the command name and arguments parsed in string and array
-});
-//user input
-repl.on("input", (line) => {
-  //the full repl input
-});
-//on error
+repl.removeCommand("cmd"); // this will remove the defined command created above
+```
+
+# closing and cleaning console
+
+- to close you can use repl.close
+- to clear you can use repl.clear
+- or you can type on the repl starting with your prefix
+- example:
+
+```sh
+> !close # will close the repl
+> !clear # will clear the repl console
+```
+
+# listening for events
+
+> you can listen for the events:<br>
+
+- "start"
+- "close"
+- "clear"
+- "input"
+- "command"
+- "systemCommand"
+- "exit"
+- "command-not-found"
+- "command-not-specified"
+- "uncaught-error"
+- "keypress"
+
+- examples
+
+```js
+//make sure that this listener is before the repl.start
+repl.on("start", () => {});
+
+//on repl close
+repl.on("close", () => {});
+
+//when the repl is cleared
+repl.on("clear", () => {});
+
+//the user input
+repl.on("input", (input) => {});
+
+//when a command is called
+repl.on("command", (cmdName, cmdArgs) => {});
+
+//when a system command is called
+repl.on("systemCommand", (cmdName, cmdArgs));
+
+//when a command was not found
+repl.on("command-not-found", (name) => {});
+
+//when a command is not specified
+repl.on("command-not-specified", () => {});
+
+//when a error is throwed
 repl.on("uncaught-error", (e) => {});
+
+//when user press a key
+repl.on("keypress", ({ ch, key }) => {});
+
+//when the repl exits
+repl.on("exit", (code) => {});
 ```
