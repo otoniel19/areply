@@ -2,7 +2,7 @@
 
 # creply
 
-[see a more detailed documentation](https://otoniel19.github.io/creply/docs/)
+[see a more detailed documentation](https://otoniel19.github.io/creply/)
 
 - create read-eval-print-loop programs
 
