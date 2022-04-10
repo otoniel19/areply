@@ -39,6 +39,9 @@ class creply {
         )} ${chalk_1.default.gray("to view help")}`
       );
     emitter.emit("start");
+    process_1.stdin.on("keypress", (str, key) => {
+      emitter.emit("keypress", { ch: str, key: key });
+    });
     while (true) {
       const question = await (0, prompt_1.default)(
         this.options.promptName,
@@ -55,7 +58,7 @@ class creply {
   eval(args) {
     args = args.replace(this.options.prefix, "").split(" ");
     var cmd = args[0];
-    var arg = args.slice(1).join(" ").trim();
+    var arg = args.slice(1).join(" ");
     if (cmd == "") {
       emitter.emit("command-not-specified");
       (0, console_1.log)(
@@ -142,13 +145,13 @@ class creply {
     emitter.on(event, callback);
   }
   /**
-     * adds an command to the repl
-       * @param cmd the name of command to add
-       @ @param description the description of the command
-       * @param action the action to perform when the command is called
-     */
+   * adds an command to the repl
+   * @param cmd the name of command to add
+   * @param description the description of the command
+   * @param action the action to perform when the command is called
+   */
   addCommand(cmd, description, action) {
-    this.commands[cmd] = {
+    this.commands[cmd.replaceAll(" ", "-")] = {
       description: description,
       action: action
     };
@@ -171,7 +174,10 @@ class creply {
           ? chalk_1.default.blue(process.exitCode)
           : chalk_1.default.blue(0)
       );
-      emitter.emit("exit");
+      emitter.emit(
+        "exit",
+        process.exitCode !== undefined ? process.exitCode : 0
+      );
     });
     //on errors
     process.on("uncaughtException", (e) => {
@@ -190,6 +196,30 @@ class creply {
   }
   get stdout() {
     return process_1.stdout;
+  }
+  /**
+   * @param type the option to update
+   * @param name the option value to update
+   */
+  update(type, name) {
+    const setopt = (
+      setType,
+      value //@ts-ignore
+    ) => (this.options[setType] = value);
+    switch (type) {
+      case "promptName":
+        setopt(type, name);
+        //clear the prompt name
+        readline_1.default.clearLine(process_1.stdin, 0);
+        //move the cursor to start of line
+        readline_1.default.cursorTo(process_1.stdin, 0);
+        //updates the prompt name
+        process_1.stdin.write(name);
+        break;
+      default:
+        setopt(type, name);
+        break;
+    }
   }
 }
 module.exports = creply;

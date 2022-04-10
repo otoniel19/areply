@@ -2,7 +2,7 @@ export interface initOptions {
   /**
    * the name of prompt
    */
-  readonly promptName: string;
+  promptName: string;
   /**
    * the name of repl
    */
@@ -48,3 +48,12 @@ export interface commands {
     action: any;
   };
 }
+
+export type updateTypes =
+  | "name"
+  | "prefix"
+  | "description"
+  | "showHelpOnStart"
+  | "historyFilePath"
+  | "promptName"
+  | "version";

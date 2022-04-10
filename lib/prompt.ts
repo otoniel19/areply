@@ -8,6 +8,8 @@ import events from "events";
 const emiter = new events();
 
 const prompt = async (promptName: string, historyFile: string) => {
+  if (!fs.existsSync(historyFile)) fs.appendFileSync(historyFile, "");
+
   const historyArray = await fs.readFileSync(historyFile, "utf8").split(/r?\n/);
 
   var rl = await readline.createInterface({

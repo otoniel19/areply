@@ -115,3 +115,21 @@ repl.on("keypress", ({ ch, key }) => {});
 //when the repl exits
 repl.on("exit", (code) => {});
 ```
+
+# updating config
+
+- you can update things like:
+
+  - "name"
+  - "version"
+  - "promptName"
+  - "prefix"
+  - "description"
+  - "showHelpOnStart"
+  - "historyFilePath"
+
+- example:
+
+```js
+repl.update("promptName", "myapp> "); // this will set the current prompt to myapp>
+```

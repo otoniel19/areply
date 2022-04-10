@@ -56,7 +56,7 @@ class creply {
   eval(args: any): void {
     args = args.replace(this.options.prefix, "").split(" ");
     var cmd: string = args[0];
-    var arg: string = args.slice(1).join(" ").trim();
+    var arg: string = args.slice(1).join(" ");
     if (cmd == "") {
       emitter.emit("command-not-specified");
       log(c.red(`error`), `${c.gray("command not specified")}`);
@@ -118,12 +118,12 @@ class creply {
   }
   /**
    * adds an command to the repl
-	 * @param cmd the name of command to add
-	 @ @param description the description of the command
-	 * @param action the action to perform when the command is called
+   * @param cmd the name of command to add
+   * @param description the description of the command
+   * @param action the action to perform when the command is called
    */
   addCommand(cmd: string, description: string, action: Function) {
-    this.commands[cmd] = {
+    this.commands[cmd.replaceAll(" ", "-")] = {
       description: description,
       action: action
     };
@@ -167,6 +167,32 @@ class creply {
   }
   get stdout(): typeof stdout {
     return stdout;
+  }
+  /**
+   * @param type the option to update
+   * @param name the option value to update
+   */
+  update(type: utils.updateTypes, name: string): void {
+    const setopt = (
+      setType: string,
+      value: any
+    ): any => //@ts-ignore
+      (this.options[setType] = value);
+
+    switch (type) {
+      case "promptName":
+        setopt(type, name);
+        //clear the prompt name
+        readline.clearLine(stdin, 0);
+        //move the cursor to start of line
+        readline.cursorTo(stdin, 0);
+        //updates the prompt name
+        stdin.write(name);
+        break;
+      default:
+        setopt(type, name);
+        break;
+    }
   }
 }
 
