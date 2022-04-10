@@ -93,4 +93,6 @@ repl.on("command", (data) => {
 repl.on("input", (line) => {
   //the full repl input
 });
+//on error
+repl.on("uncaught-error", (e) => {});
 ```

@@ -72,15 +72,19 @@ class creply extends events {
     args = args.replace(this.prefix, "");
     const command = args.split(" ")[0];
     const commandArgs = args.split(" ").slice(1).join(" ").trim();
-    if (command == "help") this.help();
-    else if (command == "close") this.close();
-    else if (command == "clear")
-      process.stdout.write("\x1B[2J\x1B[3J\x1B[H\x1Bc");
-    else {
-      const cmd = this.commands.find((key) => key.name == command);
-      if (cmd) cmd.fn(commandArgs);
+    if (command === "" || command === null || command === undefined) {
+      log(`${c.red("error")} ${c.gray("no command specified")}`);
+    } else {
+      if (command == "help") this.help();
+      else if (command == "close") this.close();
+      else if (command == "clear")
+        process.stdout.write("\x1B[2J\x1B[3J\x1B[H\x1Bc");
       else {
-        log(`${c.red("command not found:")} ${c.gray(command)}`);
+        const cmd = this.commands.find((key) => key.name == command);
+        if (cmd) cmd.fn(commandArgs);
+        else {
+          log(`${c.red("command not found:")} ${c.gray(command)}`);
+        }
       }
     }
   }
@@ -108,18 +112,24 @@ class creply extends events {
    * outputs help
    */
   help() {
-    log(`${c.gray("name:")} ${c.blue(this.originalName)}`);
-    log(`${c.gray("description:")} ${c.blue(this.description)}`);
-    log(`${c.gray("version:")} ${c.blue(this.version)}`);
-    log(`${c.gray("prefix:")} ${c.blue(this.prefix)}`);
-    log(`${c.gray("commands:")}`);
+    log(
+      `${c.blue(this.originalName)} ${c.green(this.version)}\n${c.gray(
+        this.description
+      )}\n`
+    );
+    log(
+      `${c.gray("use the prefix")} ${c.blue(this.prefix)} ${c.gray(
+        "to use commands"
+      )}`
+    );
+    log(`${c.gray("commands")}`);
     this.commands.length !== 0
       ? this.commands.forEach((key) => {
           log(` ${c.green(key.name)} ${c.grey(key.desc)}`);
         })
       : log(` ${c.red("no commands")}`);
 
-    log(`${c.gray("system commands:")}`);
+    log(`${c.gray("system commands")}`);
     log(` ${c.green("close")} ${c.grey("close the repl")}`);
     log(` ${c.green("help")} ${c.grey("show this help")}`);
     log(` ${c.green("clear")} ${c.gray("clear the repl")}`);
@@ -142,6 +152,7 @@ class creply extends events {
     });
     //handle errors
     process.on("uncaughtException", (err) => {
+      this.emit("uncaught-error", err);
       log(
         `${c.red(err.name !== undefined ? err.name.trim() : "error")} ${c.gray(
           err.message
