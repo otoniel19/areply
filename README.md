@@ -78,6 +78,7 @@ repl.removeCommand("cmd"); // this will remove the defined command created above
 - "command-not-specified"
 - "uncaught-error"
 - "keypress"
+- "did-you-mean"
 
 - examples
 
@@ -114,22 +115,25 @@ repl.on("keypress", ({ ch, key }) => {});
 
 //when the repl exits
 repl.on("exit", (code) => {});
+
+//when the command was not found the creply will try to mean the command
+repl.on("did-you-mean", (means) => {});
 ```
 
 # updating config
 
 - you can update things like:
 
-  - "name"
-  - "version"
-  - "promptName"
-  - "prefix"
-  - "description"
-  - "showHelpOnStart"
-  - "historyFilePath"
+- "name"
+- "version"
+- "promptName"
+- "prefix"
+- "description"
+- "showHelpOnStart"
+- "historyFilePath"
 
 - example:
 
 ```js
-repl.update("promptName", "myapp> "); // this will set the current prompt to myapp>
+repl.set("promptName", "myapp> "); // this will set the current prompt to myapp>
 ```

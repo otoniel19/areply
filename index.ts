@@ -72,7 +72,19 @@ class creply {
           if (this.commands[cmd]) this.commands[cmd].action(arg);
         } else {
           emitter.emit("command-not-found", cmd);
-          log(`${c.red("command not found:")} ${c.gray(cmd)}`);
+          log(`${c.red("command not found:")} ${c.blue(cmd)}`);
+          //create a command mean
+          const didYouMean = utils.didYouMean(cmd, [
+            "help",
+            "close",
+            "clear",
+            ...Object.keys(this.commands)
+          ]);
+          didYouMean.length > 0
+            ? (log(c.red("did you mean: ")),
+              emitter.emit("did-you-mean", didYouMean))
+            : "";
+          for (const mean in didYouMean) log(` ${c.blue(didYouMean[mean])}`);
         }
       }
     }
@@ -170,9 +182,9 @@ class creply {
   }
   /**
    * @param type the option to update
-   * @param name the option value to update
+   * @param val the option value to update
    */
-  update(type: utils.updateTypes, name: string): void {
+  set(type: utils.updateTypes, val: string): void {
     const setopt = (
       setType: string,
       value: any
@@ -181,16 +193,16 @@ class creply {
 
     switch (type) {
       case "promptName":
-        setopt(type, name);
+        setopt(type, val);
         //clear the prompt name
         readline.clearLine(stdin, 0);
         //move the cursor to start of line
         readline.cursorTo(stdin, 0);
         //updates the prompt name
-        stdin.write(name);
+        stdin.write(val);
         break;
       default:
-        setopt(type, name);
+        setopt(type, val);
         break;
     }
   }

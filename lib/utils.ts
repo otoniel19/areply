@@ -40,7 +40,8 @@ export type creplyEvents =
   | "command-not-found"
   | "command-not-specified"
   | "uncaught-error"
-  | "keypress";
+  | "keypress"
+  | "did-you-mean";
 
 export interface commands {
   [command: string]: {
@@ -57,3 +58,25 @@ export type updateTypes =
   | "historyFilePath"
   | "promptName"
   | "version";
+
+//did you mean
+export const didYouMean = (input: string, list: any[]): string[] => {
+  var bestMatch: string[] = [];
+  list.map((word: string, idx: number) => {
+    var W: string = word.toLowerCase();
+    var I: string = input.toLowerCase();
+    if (I === W) {
+      bestMatch.push(word);
+    }
+    if (I.startsWith(word[idx])) {
+      var filter: string[] = list.filter((o) => o.startsWith(word[idx]));
+      bestMatch = [...bestMatch, ...filter];
+    }
+    if (input.includes(word)) {
+      var filter: string[] = list.filter((o) => input.includes(word));
+      bestMatch = [...bestMatch, ...filter];
+    }
+  });
+  bestMatch = [...new Set(bestMatch)];
+  return bestMatch;
+};
