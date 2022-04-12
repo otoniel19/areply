@@ -1,4 +1,3 @@
-/// <reference types="node" />
 export = creply;
 declare class creply {
     /**
@@ -197,6 +196,5 @@ declare class creply {
      * ```
      * @returns {readline}
      */
-    get readline(): typeof readline;
+    get readline(): readline;
 }
-import readline = require("readline");

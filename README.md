@@ -128,13 +128,11 @@ cli>
 - example listening to the `line` event
 - the event will be called when the user types a line
 
-````js
-
 ```js
 repl.on("line", (line) => {
   console.log("line: " + line);
 });
-````
+```
 
 - example listening to the `uncaught-error` event
 - the event will be called when the repl throws an error
@@ -150,15 +148,11 @@ repl.on("uncaught-error", (err) => {
 - example listening the `keypress` event
 - the event will be called when the user press a key
 
-````js
-
-```js
-
 ```js
 repl.on("keypress", (char, key) => {
   console.log("keypress: " + key);
 });
-````
+```
 
 - example listening to the `unhandled-rejection` event
 - this event will be called when the repl has an unhandled rejection

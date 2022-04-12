@@ -108,7 +108,7 @@ you can use it with TypeScript too!</p>
 <li><p>the event will be called when the user types a line</p>
 </li>
 </ul>
-<pre><code class="language-js"><br/><span class="hl-4">```js</span><br/><span class="hl-4">repl.on(&quot;line&quot;, (line) =&gt; {</span><br/><span class="hl-4">  console.log(&quot;line: &quot; + line);</span><br/><span class="hl-4">});</span>
+<pre><code class="language-js"><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">on</span><span class="hl-1">(</span><span class="hl-4">&quot;line&quot;</span><span class="hl-1">, (</span><span class="hl-5">line</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-5">console</span><span class="hl-1">.</span><span class="hl-3">log</span><span class="hl-1">(</span><span class="hl-4">&quot;line: &quot;</span><span class="hl-1"> + </span><span class="hl-5">line</span><span class="hl-1">);</span><br/><span class="hl-1">});</span>
 </code></pre>
 <ul>
 <li>example listening to the <code>uncaught-error</code> event</li>
@@ -120,7 +120,7 @@ you can use it with TypeScript too!</p>
 <li>example listening the <code>keypress</code> event</li>
 <li>the event will be called when the user press a key</li>
 </ul>
-<pre><code class="language-js"><br/><span class="hl-4">```js</span><br/><br/><span class="hl-4">```</span><span class="hl-5">js</span><br/><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">on</span><span class="hl-1">(</span><span class="hl-4">&quot;keypress&quot;</span><span class="hl-1">, (</span><span class="hl-5">char</span><span class="hl-1">, </span><span class="hl-5">key</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-5">console</span><span class="hl-1">.</span><span class="hl-3">log</span><span class="hl-1">(</span><span class="hl-4">&quot;keypress: &quot;</span><span class="hl-1"> + </span><span class="hl-5">key</span><span class="hl-1">);</span><br/><span class="hl-1">});</span>
+<pre><code class="language-js"><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">on</span><span class="hl-1">(</span><span class="hl-4">&quot;keypress&quot;</span><span class="hl-1">, (</span><span class="hl-5">char</span><span class="hl-1">, </span><span class="hl-5">key</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-5">console</span><span class="hl-1">.</span><span class="hl-3">log</span><span class="hl-1">(</span><span class="hl-4">&quot;keypress: &quot;</span><span class="hl-1"> + </span><span class="hl-5">key</span><span class="hl-1">);</span><br/><span class="hl-1">});</span>
 </code></pre>
 <ul>
 <li>example listening to the <code>unhandled-rejection</code> event</li>
