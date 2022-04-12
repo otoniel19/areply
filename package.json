@@ -20,15 +20,9 @@
   },
   "homepage": "https://github.com/otoniel19/creply#readme",
   "devDependencies": {
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.23",
-    "jest": "^27.5.1"
+    "@types/node": "^17.0.23"
   },
   "dependencies": {
-    "chalk": "4.1.2",
-    "keypress": "^0.2.1"
-  },
-  "scripts": {
-    "test": "jest"
+    "chalk": "4.1.2"
   }
 }
