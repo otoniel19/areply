@@ -40,28 +40,27 @@ class creply {
    * create a new repl
    * @param {options} options the creply options
    * @typedef {{ name: string; version: string; description: string; history: string; prefix: string; prompt: string }} options
-   * @constructor
    * @example
    * ```js
    * const creply = require("creply");
    * const repl = new creply({
-   * 	name: "app",
-   * 	version: "1.0.0",
-   * 	description: "my repl",
-   * 	history: "./history.txt",
-   * 	prefix: "!",
-   * 	prompt: "> "
+   * 	 name: "app",
+   * 	 version: "1.0.0",
+   * 	 description: "my repl",
+   * 	 history: "./history.txt",
+   * 	 prefix: "!",
+   * 	 prompt: "> "
    * });
    * ```
    */
   constructor(options) {
     /** @type {options} */
     this.options = options;
-    /** 
-		    all the commands created by the creply.addCommand method
-		    @type command
-				@typedef {{ [name: string]: { description: string; usage: () => string; exec: (args: any) => void }}} command
-    */
+    /**
+     * all the commands created by the creply.addCommand method
+     * @type command
+     * @typedef {{ [name: string]: { description: string; usage: () => string; exec: (args: any) => void }}} command
+     */
     this.commands = {};
   }
   /**
@@ -69,7 +68,7 @@ class creply {
    * @returns {Promise<string>}
    * @param {string} history - history file
    */
-  async rl(history) {
+  async interface(history) {
     if (!fs.existsSync(history)) fs.appendFileSync(history, "");
     var rlHistory = getHistory(history);
     global.rl = readline.createInterface({
@@ -168,7 +167,7 @@ class creply {
       emitter.emit("cursor-move", cursor);
     });
     while (true) {
-      var rl = this.rl(options.history);
+      var rl = this.interface(options.history);
       const line = await rl;
       emitter.emit("line", line);
       fs.appendFileSync(options.history, "\n" + line);
@@ -412,6 +411,7 @@ class creply {
    * ```js
    * repl.get("prompt") // will return the prompt
    * ```
+   * @typedef {"name" | "description" | "prompt" | "history" | "version" | "prefix"} optionsNames
    * @param {optionsNames} name the name of the option
    * @returns {any} the value of the option
    */
@@ -429,6 +429,14 @@ class creply {
    */
   get readline() {
     return readline;
+  }
+  /**
+   * the readline interface used by creply
+   * first start the repl to get the readline interface
+   * @returns {readline.Interface}
+   */
+  get rl() {
+    return global.rl;
   }
 }
 

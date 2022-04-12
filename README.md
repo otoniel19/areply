@@ -215,3 +215,10 @@ repl.on("start", () => {
   console.log("started!");
 });
 ```
+
+## readline and rl
+
+- the readline is the readline library used by the creply
+- the rl is the readline interface used by the creply
+- to get readline use `repl.readline`
+- to get rl use `repl.rl` but you need to start the repl first by using `repl.start()`

@@ -4,17 +4,16 @@ declare class creply {
      * create a new repl
      * @param {options} options the creply options
      * @typedef {{ name: string; version: string; description: string; history: string; prefix: string; prompt: string }} options
-     * @constructor
      * @example
      * ```js
      * const creply = require("creply");
      * const repl = new creply({
-     * 	name: "app",
-     * 	version: "1.0.0",
-     * 	description: "my repl",
-     * 	history: "./history.txt",
-     * 	prefix: "!",
-     * 	prompt: "> "
+     * 	 name: "app",
+     * 	 version: "1.0.0",
+     * 	 description: "my repl",
+     * 	 history: "./history.txt",
+     * 	 prefix: "!",
+     * 	 prompt: "> "
      * });
      * ```
      */
@@ -36,10 +35,10 @@ declare class creply {
         prompt: string;
     };
     /**
-            all the commands created by the creply.addCommand method
-            @type command
-                @typedef {{ [name: string]: { description: string; usage: () => string; exec: (args: any) => void }}} command
-    */
+     * all the commands created by the creply.addCommand method
+     * @type command
+     * @typedef {{ [name: string]: { description: string; usage: () => string; exec: (args: any) => void }}} command
+     */
     commands: {
         [name: string]: {
             description: string;
@@ -52,7 +51,7 @@ declare class creply {
      * @returns {Promise<string>}
      * @param {string} history - history file
      */
-    rl(history: string): Promise<string>;
+    interface(history: string): Promise<string>;
     /**
      * @typedef {"command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean"} events eventName
      * @param {events} eventName
@@ -183,10 +182,11 @@ declare class creply {
      * ```js
      * repl.get("prompt") // will return the prompt
      * ```
+     * @typedef {"name" | "description" | "prompt" | "history" | "version" | "prefix"} optionsNames
      * @param {optionsNames} name the name of the option
      * @returns {any} the value of the option
      */
-    get(name: optionsNames): any;
+    get(name: "name" | "version" | "description" | "history" | "prefix" | "prompt"): any;
     /**
      * the readline used by creply
      * @example
@@ -196,4 +196,10 @@ declare class creply {
      * @returns {readline}
      */
     get readline(): readline;
+    /**
+     * the readline interface used by creply
+     * first start the repl to get the readline interface
+     * @returns {readline.Interface}
+     */
+    get rl(): readline.Interface;
 }
