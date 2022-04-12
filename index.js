@@ -5,6 +5,7 @@ const c = require("chalk");
 const { log } = console;
 const { EventEmitter } = require("events");
 const utils = require("./utils");
+const cp = require("child_process");
 
 const emitter = new EventEmitter();
 process.setMaxListeners(0);
@@ -21,8 +22,8 @@ const getHistory = (file) =>
   fs
     .readFileSync(file, "utf8")
     .split(/r?\n/)
-    .reverse()
-    .filter((o) => o !== "");
+    .filter((o) => o !== "")
+    .reverse();
 
 /**
  * only logs if eventName dont have none listeners
@@ -62,6 +63,54 @@ class creply {
      * @typedef {{ [name: string]: { description: string; usage: () => string; exec: (args: any) => void }}} command
      */
     this.commands = {};
+    /**
+     * the repl system commands
+     * @typedef {{ [name: string]: { description: string; exec: (args: any) => void }}} sysCommand
+     * @type {sysCommand}
+     * @private
+     */
+    this.sysCommands = {
+      help: {
+        description: "show this help",
+        exec: (arg) => (arg !== "" ? this.usage(arg) : this.help())
+      },
+      clear: {
+        description: "clear the screen",
+        exec: () => this.clear()
+      },
+      exit: {
+        description: "exit the repl",
+        exec: () => this.exit()
+      },
+      history: {
+        description: "show the history",
+        exec: (argv) => {
+          const historyRl = readline.createInterface({
+            input: fs.createReadStream(options.history),
+            crlfDelay: Infinity
+          });
+          var array = [];
+          historyRl.on("line", (line) => {
+            if (line !== "") {
+              array.push(line);
+            }
+          });
+
+          historyRl.on("close", () => {
+            argv === ""
+              ? (log("\n"),
+                array.forEach((o, idx) => {
+                  var id = idx + 1;
+                  log(id.toString(), o);
+                }),
+                this.set({ prompt: options.prompt }))
+              : (() => {
+                  this.log(array[argv + 1]);
+                })();
+          });
+        }
+      }
+    };
   }
   /**
    * the readline.Interface instance
@@ -76,7 +125,19 @@ class creply {
       output: process.stdout,
       history: rlHistory,
       historySize: rlHistory.length,
-      removeHistoryDuplicates: true
+      removeHistoryDuplicates: true,
+      completer: (line) => {
+        line = line.replace(this.options.prefix, "");
+        const completions = [
+          "help",
+          "clear",
+          "exit",
+          ...Object.keys(this.commands)
+        ];
+        const hits = completions.filter((c) => c.startsWith(line));
+        // show all completions if none found
+        return [hits.length ? hits : completions, line];
+      }
     });
     return new Promise((resolve, reject) => {
       global.rl.question(this.options.prompt, (line) => {
@@ -185,16 +246,16 @@ class creply {
    */
   eval(line) {
     const options = this.options;
-    const data = line.replace(options.prefix, "").split(" ");
+    const data = line
+      .replace(options.prefix, "")
+      .replaceAll(this.options.prompt, "")
+      .split(" ");
     const command = data[0];
     const args = data.slice(1).join("");
     if (command !== "") {
-      if (command === "help") {
-        this.help();
-      } else if (command === "clear") this.clear();
-      else if (command === "exit") this.exit();
-      else if (command === "usage") this.usage(args);
-      else {
+      if (command in this.sysCommands) {
+        this.sysCommands[command].exec(args);
+      } else {
         if (command in this.commands) {
           emitter.emit("command", command, args);
           //if the command was removed this if is required
@@ -238,21 +299,22 @@ class creply {
    * @returns {void}
    */
   help() {
-    log(c.bold(`welcome to ${this.options.name} ${this.options.version}`));
-    log(c.gray(this.options.description));
-    log(c.gray(`use the prefix ${c.blue(this.options.prefix)} for commands`));
-    log(c.bold("commands:"));
+    log(`${this.options.name} ${this.options.version}`);
+    log(this.options.description + "\n");
+    log(c.gray("press tab to autocomplete"));
+    log(c.gray(`use the prefix ${c.blue(this.options.prefix)} for commands\n`));
+    log(c.bold("commands"));
     var cmdKeys = Object.keys(this.commands);
     cmdKeys.length > 0
       ? cmdKeys.forEach((o) => {
           log(` ${c.blue(o)} - ${this.commands[o].description}`);
         })
       : log(c.red(" no commands"));
-    log(c.bold("system commands:"));
-    log(` ${c.blue("help")} - show this help`);
-    log(` ${c.blue("clear")} - clear the screen`);
-    log(` ${c.blue("exit")} - exit the repl`);
-    log(` ${c.blue("usage")} - show usage of the commands`);
+    log(c.bold("system commands"));
+    var sysKeys = Object.keys(this.sysCommands);
+    sysKeys.forEach((o) => {
+      log(` ${c.blue(o)} - ${this.sysCommands[o].description}`);
+    });
   }
   /**
    * clears the screen
@@ -313,6 +375,8 @@ class creply {
    * handle things like:
    * - on process exit
    * - on error
+   * if an error is thrown and the error comes with `process.exit()` the repl will exit
+   * @private
    */
   handler() {
     process.on("exit", (code) => {
@@ -350,25 +414,27 @@ class creply {
   /**
    * adds a command
    * @param {string} name the name of the command
-   * @param {string} description the description of the command
-   * @param {(args: any) => void} exec the action of the command
-   * @param {() => string} usage the usage of the command
+   * @typedef {{ description: string; exec: (args: any) => void; usage: () => string }} addCommandOptions
    * @example
    * ```js
-   * repl.addCommand("say", "says something", (args) => {
-   * 	console.log(args)
-   * 	}, () => {
-   * 		return "say <something>"
+   * repl.addCommand("say", {
+   * 	description: "says something",
+   * 	exec: (args) => {
+   * 		console.log(args);
+   * 	},
+   * 	usage: () => {
+   * 		return "say <something>";
    * 	}
    * });
    * ```
+   * @param {addCommandOptions} options
    * @returns {void}
    */
-  addCommand(name, description, exec, usage) {
+  addCommand(name, options) {
     this.commands[name] = {
-      description,
-      exec,
-      usage
+      description: options.description,
+      exec: options.exec,
+      usage: options.usage
     };
   }
   /**
@@ -441,6 +507,15 @@ class creply {
    */
   get rl() {
     return global.rl;
+  }
+  /**
+   * @param {any[]) data
+   */
+  log(...data) {
+    readline.clearLine(process.stdin, 0);
+    readline.cursorTo(process.stdin, 0);
+    log(...data);
+    this.set({ prompt: this.options.prompt });
   }
 }
 

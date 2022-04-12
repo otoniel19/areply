@@ -222,3 +222,41 @@ repl.on("start", () => {
 - the rl is the readline interface used by the creply
 - to get readline use `repl.readline`
 - to get rl use `repl.rl` but you need to start the repl first by using `repl.start()`
+
+## view command usage
+
+- the `repl.usage()` method will print the usage of the command
+
+```js
+repl.usage("hello"); // hello [name]
+```
+
+- you can type `help [command]` to see the usage of the command on the repl
+
+```sh
+app> help hello
+```
+
+- output:
+
+```sh
+hello [name]
+```
+
+## common problems
+
+- if `console.log` prints out of the repl, you can use the `repl.log()` method
+- the `repl.log()` method will print out the data to the repl
+- this methods clear prompt and move the cursor to the start of the line
+
+```js
+repl.log("hello");
+```
+
+- output:
+
+```sh
+cli>
+hello
+cli>
+```

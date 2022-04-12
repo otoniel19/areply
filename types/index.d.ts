@@ -47,6 +47,13 @@ declare class creply {
         };
     };
     /**
+     * the repl system commands
+     * @typedef {{ [name: string]: { description: string; exec: (args: any) => void }}} sysCommand
+     * @type {sysCommand}
+     * @private
+     */
+    private sysCommands;
+    /**
      * the readline.Interface instance
      * @returns {Promise<string>}
      * @param {string} history - history file
@@ -63,7 +70,7 @@ declare class creply {
      * });
      * ```
      */
-    on(eventName: "command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean", listener: any): void;
+    on(eventName: "exit" | "command" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean", listener: any): void;
     /**
      * starts the repl
      * @returns {Promise<void>}
@@ -125,26 +132,34 @@ declare class creply {
      * handle things like:
      * - on process exit
      * - on error
+     * if an error is thrown and the error comes with `process.exit()` the repl will exit
+     * @private
      */
-    handler(): void;
+    private handler;
     /**
      * adds a command
      * @param {string} name the name of the command
-     * @param {string} description the description of the command
-     * @param {(args: any) => void} exec the action of the command
-     * @param {() => string} usage the usage of the command
+     * @typedef {{ description: string; exec: (args: any) => void; usage: () => string }} addCommandOptions
      * @example
      * ```js
-     * repl.addCommand("say", "says something", (args) => {
-     * 	console.log(args)
-     * 	}, () => {
-     * 		return "say <something>"
+     * repl.addCommand("say", {
+     * 	description: "says something",
+     * 	exec: (args) => {
+     * 		console.log(args);
+     * 	},
+     * 	usage: () => {
+     * 		return "say <something>";
      * 	}
      * });
      * ```
+     * @param {addCommandOptions} options
      * @returns {void}
      */
-    addCommand(name: string, description: string, exec: (args: any) => void, usage: () => string): void;
+    addCommand(name: string, options: {
+        description: string;
+        exec: (args: any) => void;
+        usage: () => string;
+    }): void;
     /**
      * remove a command
      * @example
@@ -186,7 +201,7 @@ declare class creply {
      * @param {optionsNames} name the name of the option
      * @returns {any} the value of the option
      */
-    get(name: "name" | "version" | "description" | "history" | "prefix" | "prompt"): any;
+    get(name: "history" | "name" | "version" | "description" | "prefix" | "prompt"): any;
     /**
      * the readline used by creply
      * @example
@@ -202,4 +217,8 @@ declare class creply {
      * @returns {readline.Interface}
      */
     get rl(): readline.Interface;
+    /**
+     * @param {any[]) data
+     */
+    log(...data: any[]): void;
 }
