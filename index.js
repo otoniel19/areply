@@ -222,7 +222,11 @@ class creply {
       }
     } else {
       emitter.emit("command-not-specified");
-      logl("", c.red("error"), c.gray("command not specified"));
+      logl(
+        "command-not-specified",
+        c.red("error"),
+        c.gray("command not specified")
+      );
     }
   }
   /**
