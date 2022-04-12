@@ -137,13 +137,11 @@ repl.on("line", (line) => {
 - example listening to the `uncaught-error` event
 - the event will be called when the repl throws an error
 
-````js
-
 ```js
 repl.on("uncaught-error", (err) => {
   console.log("uncaught-error: " + err);
 });
-````
+```
 
 - example listening the `keypress` event
 - the event will be called when the user press a key
