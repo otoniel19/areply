@@ -2,11 +2,12 @@
   "name": "creply",
   "version": "1.0.7",
   "description": "creply create read–eval–print-loop (repl) programs",
-  "main": "dist/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/otoniel19/creply.git"
   },
+  "types": "types",
   "keywords": [
     "repl",
     "read-eval-print-loop",
@@ -19,9 +20,15 @@
   },
   "homepage": "https://github.com/otoniel19/creply#readme",
   "devDependencies": {
-    "@types/node": "^17.0.23"
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.23",
+    "jest": "^27.5.1"
   },
   "dependencies": {
-    "chalk": "4.1.2"
+    "chalk": "4.1.2",
+    "keypress": "^0.2.1"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }
