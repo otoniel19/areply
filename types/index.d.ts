@@ -54,7 +54,7 @@ declare class creply {
      */
     rl(history: string): Promise<string>;
     /**
-     * @typedef {"command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean" | "unhandled-rejection"} events eventName
+     * @typedef {"command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean"} events eventName
      * @param {events} eventName
      * @param {any} listener
      * @example
@@ -64,7 +64,7 @@ declare class creply {
      * });
      * ```
      */
-    on(eventName: "command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean" | "unhandled-rejection", listener: any): void;
+    on(eventName: "command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean", listener: any): void;
     /**
      * starts the repl
      * @returns {Promise<void>}
@@ -125,8 +125,7 @@ declare class creply {
     /**
      * handle things like:
      * - on process exit
-     * - on errors
-     * - on unhandled rejections
+     * - on error
      */
     handler(): void;
     /**

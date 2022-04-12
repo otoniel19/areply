@@ -87,7 +87,7 @@ class creply {
     });
   }
   /**
-   * @typedef {"command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean" | "unhandled-rejection"} events eventName
+   * @typedef {"command" | "exit" | "start" | "uncaught-error" | "keypress" | "line" | "cursor-move" | "command-not-found" | "command-not-specified" | "did-you-mean"} events eventName
    * @param {events} eventName
    * @param {any} listener
    * @example
@@ -120,8 +120,7 @@ class creply {
       "cursor-move",
       "command-not-found",
       "command-not-specified",
-      "did-you-mean",
-      "unhandled-rejection"
+      "did-you-mean"
     ];
     //check if eventName is a valid event
     if (!eventsArray.includes(eventName))
@@ -310,8 +309,7 @@ class creply {
   /**
    * handle things like:
    * - on process exit
-   * - on errors
-   * - on unhandled rejections
+   * - on error
    */
   handler() {
     process.on("exit", (code) => {
@@ -344,17 +342,6 @@ class creply {
         //resumes the prompt after an error
         process.stdin.write(this.options.prompt);
       }
-    });
-    process.on("unhandledRejection", async (reason, p) => {
-      emitter.emit("unhandled-rejection", reason, p);
-      log(
-        `\n${c.red("unhandledRejection")} ${
-          reason !== "" ? c.bold("named") : void ""
-        } ${c.bold(reason)}
-          `.replace(":", "")
-      );
-      //resumes the prompt after an unhandled rejection
-      process.stdin.write(this.options.prompt);
     });
   }
   /**

@@ -123,7 +123,7 @@ cli>
 ## listening to events
 
 - events are listen with the `repl.on()` method
-- when you listen an event the repl will not prints the data except the events `uncaught-error` and `unhandled-rejection`
+- when you listen an event the repl will not prints the data except the event `uncaught-error`
 
 - example listening to the `line` event
 - the event will be called when the user types a line
@@ -149,15 +149,6 @@ repl.on("uncaught-error", (err) => {
 ```js
 repl.on("keypress", (char, key) => {
   console.log("keypress: " + key);
-});
-```
-
-- example listening to the `unhandled-rejection` event
-- this event will be called when the repl has an unhandled rejection
-
-```js
-repl.on("unhandled-rejection", (reason, promise) => {
-  console.log("unhandled-rejection: " + reason);
 });
 ```
 
