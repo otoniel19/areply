@@ -42,7 +42,7 @@ you can use it with TypeScript too!</p>
 <li>commands are added with the <code>repl.addCommand()</code> method</li>
 <li>commands are saved in the <code>repl.commands</code> object</li>
 </ul>
-<pre><code class="language-js"><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">addCommand</span><span class="hl-1">(</span><br/><span class="hl-1">  </span><span class="hl-4">&quot;hello&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">&quot;say hello&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  (</span><span class="hl-5">args</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-5">console</span><span class="hl-1">.</span><span class="hl-3">log</span><span class="hl-1">(</span><span class="hl-4">&quot;hello &quot;</span><span class="hl-1"> + </span><span class="hl-5">args</span><span class="hl-1">);</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  () </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-7">return</span><span class="hl-1"> </span><span class="hl-4">&quot;hello [name]&quot;</span><span class="hl-1">;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">);</span>
+<pre><code class="language-js"><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">addCommand</span><span class="hl-1">(</span><span class="hl-4">&quot;hello&quot;</span><span class="hl-1">,{ </span><br/><span class="hl-1">  </span><span class="hl-5">description:</span><span class="hl-1"> </span><span class="hl-4">&quot;hello world&quot;</span><span class="hl-1">, </span><br/><span class="hl-1">  </span><span class="hl-3">exec</span><span class="hl-5">:</span><span class="hl-1"> (</span><span class="hl-5">args</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> { </span><br/><span class="hl-1">   </span><span class="hl-5">console</span><span class="hl-1">.</span><span class="hl-3">log</span><span class="hl-1">(</span><span class="hl-4">&quot;hello world&quot;</span><span class="hl-1">)</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-3">usage</span><span class="hl-5">:</span><span class="hl-1"> () </span><span class="hl-0">=&gt;</span><span class="hl-1"> </span><span class="hl-4">&quot;hello [name]&quot;</span><br/><span class="hl-1">  })</span>
 </code></pre>
 <ul>
 <li>this will add a command with the following options:</li>
@@ -182,7 +182,7 @@ you can use it with TypeScript too!</p>
 <ul>
 <li>the <code>repl.usage()</code> method will print the usage of the command</li>
 </ul>
-<pre><code class="language-js"><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">usage</span><span class="hl-1">(</span><span class="hl-4">&quot;hello&quot;</span><span class="hl-1">); </span><span class="hl-8">// hello [name]</span>
+<pre><code class="language-js"><span class="hl-5">repl</span><span class="hl-1">.</span><span class="hl-3">usage</span><span class="hl-1">(</span><span class="hl-4">&quot;hello&quot;</span><span class="hl-1">); </span><span class="hl-7">// hello [name]</span>
 </code></pre>
 <ul>
 <li>you can type <code>help [command]</code> to see the usage of the command on the repl</li>

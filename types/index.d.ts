@@ -25,15 +25,11 @@ declare class creply {
         prefix: string;
         prompt: string;
     });
-    /** @type {options} */
-    options: {
-        name: string;
-        version: string;
-        description: string;
-        history: string;
-        prefix: string;
-        prompt: string;
-    };
+    /**
+         * @type {options}
+         * @private
+     */
+    private options;
     /**
      * all the commands created by the creply.addCommand method
      * @type command
