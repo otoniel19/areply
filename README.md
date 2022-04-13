@@ -53,16 +53,13 @@ app>
 - commands are saved in the `repl.commands` object
 
 ```js
-repl.addCommand(
-  "hello",
-  "say hello",
-  (args) => {
-    console.log("hello " + args);
+repl.addCommand("hello",{ 
+  description: "hello world", 
+  exec: (args) => { 
+   console.log("hello world")
   },
-  () => {
-    return "hello [name]";
-  }
-);
+  usage: () => "hello [name]"
+  })
 ```
 
 - this will add a command with the following options:
@@ -260,3 +257,4 @@ cli>
 hello
 cli>
 ```
+

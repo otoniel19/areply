@@ -55,7 +55,10 @@ class creply {
    * ```
    */
   constructor(options) {
-    /** @type {options} */
+    /** 
+		 * @type {options}
+		 * @private
+     */
     this.options = options;
     /**
      * all the commands created by the creply.addCommand method
