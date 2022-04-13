@@ -7,4 +7,5 @@
 export function findMean(input: string, list: string[]): string[];
 export class error extends Error {
     constructor(opts: any);
+    name: any;
 }
