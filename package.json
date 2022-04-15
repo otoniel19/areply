@@ -1,6 +1,6 @@
 {
   "name": "creply",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "creply create read–eval–print-loop (repl) programs",
   "main": "index.js",
   "repository": {
@@ -11,7 +11,13 @@
   "keywords": [
     "repl",
     "read-eval-print-loop",
-    "terminal"
+    "terminal",
+    "creply",
+    "events",
+    "history",
+    "prompt",
+    "command",
+    "node.js"
   ],
   "author": "otoniel19",
   "license": "MIT",
