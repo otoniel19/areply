@@ -55,9 +55,9 @@ class creply {
    * ```
    */
   constructor(options) {
-    /** 
-		 * @type {options}
-		 * @private
+    /**
+     * @type {options}
+     * @private
      */
     this.options = options;
     /**
@@ -515,9 +515,7 @@ class creply {
    * @param {any[]) data
    */
   log(...data) {
-    readline.clearLine(process.stdin, 0);
-    readline.cursorTo(process.stdin, 0);
-    log(...data);
+    console.log(...data);
     this.set({ prompt: this.options.prompt });
   }
 }

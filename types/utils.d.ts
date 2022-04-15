@@ -9,3 +9,4 @@ export class error extends Error {
     constructor(opts: any);
     name: any;
 }
+export function logto(x: any, y: any, ...data: any[]): void;

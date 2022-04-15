@@ -1,4 +1,6 @@
 //@ts-nocheck
+const readline = require("readline");
+
 /**
  * finds a mean
  * @param {string} input
@@ -30,7 +32,13 @@ class error extends Error {
   }
 }
 
+const logto = (x, y, ...data) => {
+  readline.cursorTo(process.stdout, x, y);
+  console.log(...data);
+};
+
 module.exports = {
   findMean,
-  error
+  error,
+  logto
 };

@@ -26,8 +26,8 @@ declare class creply {
         prompt: string;
     });
     /**
-         * @type {options}
-         * @private
+     * @type {options}
+     * @private
      */
     private options;
     /**
