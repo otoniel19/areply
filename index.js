@@ -5,7 +5,6 @@ const c = require("chalk");
 const { log } = console;
 const { EventEmitter } = require("events");
 const utils = require("./utils");
-const cp = require("child_process");
 
 const emitter = new EventEmitter();
 process.setMaxListeners(0);
@@ -31,7 +30,7 @@ const getHistory = (file) =>
  * @param {any[]} data
  */
 const logl = (eventName, ...data) => {
-  if (emitter.listenerCount(eventName) < 1) {
+  if (emitter.listenerCount(eventName) === 0) {
     log(...data);
   }
 };
@@ -123,6 +122,7 @@ class creply {
   async interface(history) {
     if (!fs.existsSync(history)) fs.appendFileSync(history, "");
     var rlHistory = getHistory(history);
+    /** @type {readline.Interface} */
     global.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -132,9 +132,7 @@ class creply {
       completer: (line) => {
         line = line.replace(this.options.prefix, "");
         const completions = [
-          "help",
-          "clear",
-          "exit",
+          ...Object.keys(this.sysCommands),
           ...Object.keys(this.commands)
         ];
         const hits = completions.filter((c) => c.startsWith(line));
@@ -143,10 +141,35 @@ class creply {
       }
     });
     return new Promise((resolve, reject) => {
-      global.rl.question(this.options.prompt, (line) => {
+      rl.question(this.options.prompt, (line) => {
         resolve(line);
-        global.rl.close();
+        rl.close();
       });
+      //refresh the line
+      process.stdin.on("keypress", (str, key) =>
+        setTimeout(() => rl._refreshLine(), 0)
+      );
+      //syntax highlighting
+      var options = this.options;
+      rl._writeToOutput = (line) => {
+        var str = line.replace(options.prompt, "");
+        var allCommands = [
+          ...Object.keys(this.sysCommands),
+          ...Object.keys(this.commands)
+        ];
+        //highlights prefix and command name
+        if (str.startsWith(options.prefix)) {
+          //name of command
+          var cmd = str.replace(options.prefix, "").split(" ")[0] || "";
+          line = line.replace(options.prefix, c.blue(options.prefix));
+          var has = (str) => allCommands.indexOf(str) !== -1;
+          //if is a command then highlight the command name
+          if (has(cmd)) line = line.replace(cmd, c.blue(cmd));
+          else line = line.replace(cmd, c.red(cmd));
+        }
+        //apply the syntax highlighting
+        rl.output.write(line);
+      };
     });
   }
   /**
@@ -155,8 +178,8 @@ class creply {
    * @param {any} listener
    * @example
    * ```js
-   * repl.on("keypress", (char, key) => {
-   *   console.log("key press:",key.name)
+   * repl.on("line",(line) => {
+   *   console.log("Hello "+line);
    * });
    * ```
    */
@@ -249,10 +272,7 @@ class creply {
    */
   eval(line) {
     const options = this.options;
-    const data = line
-      .replace(options.prefix, "")
-      .replaceAll(this.options.prompt, "")
-      .split(" ");
+    const data = line.replace(options.prefix, "").split(" ");
     const command = data[0];
     const args = data.slice(1).join("");
     if (command !== "") {
@@ -265,9 +285,7 @@ class creply {
           if (this.commands[command]) this.commands[command].exec(args);
         } else {
           var mean = utils.findMean(command, [
-            "help",
-            "clear",
-            "exit",
+            ...Object.keys(this.sysCommands),
             ...Object.keys(this.commands)
           ]);
           //.filter((o) => o !== undefined);
@@ -512,7 +530,7 @@ class creply {
     return global.rl;
   }
   /**
-   * @param {any[]) data
+   * @param {any[]} data
    */
   log(...data) {
     console.log(...data);

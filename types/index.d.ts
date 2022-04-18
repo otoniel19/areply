@@ -61,8 +61,8 @@ declare class creply {
      * @param {any} listener
      * @example
      * ```js
-     * repl.on("keypress", (char, key) => {
-     *   console.log("key press:",key.name)
+     * repl.on("line",(line) => {
+     *   console.log("Hello "+line);
      * });
      * ```
      */
@@ -214,7 +214,7 @@ declare class creply {
      */
     get rl(): readline.Interface;
     /**
-     * @param {any[]) data
+     * @param {any[]} data
      */
     log(...data: any[]): void;
 }

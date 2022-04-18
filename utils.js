@@ -21,6 +21,7 @@ const findMean = (input, list) => {
   });
   return mean.filter((o) => o !== undefined);
 };
+
 class error extends Error {
   constructor(opts) {
     super(opts.message);
